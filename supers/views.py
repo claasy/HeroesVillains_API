@@ -4,19 +4,29 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import SuperSerializer
 from .models import Super
+from .models import SuperType
 
 @api_view(['GET','POST'])
 def supers_list(request):
+
+    # supertypes = SuperType.objects.all()
+    # custom_response_dictionary = {}
+
+    # for supertype in supertypes:
+    #         supers = Super.objects.filter(super_type_id=supertype.id)
+    #         super_serializer = SuperSerializer(supers, many=True)
+    #         custom_response_dictionary[supertype.type] = {
+    #             "type": supertype.type,
+    #             "supers": SuperSerializer.data
+    # }
+    # return Response(custom_response_dictionary)
+
     if request.method == 'GET':
         super_type = request.query_params.get('type')
         print(super_type)
-
         supers = Super.objects.all()
-
         if super_type:
             supers = supers.filter(super_type__type=super_type)
-
-
         serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
